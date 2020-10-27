@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-alert */
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d'); // To store the 2D rendering context
 
@@ -26,6 +28,9 @@ const brickPadding = 10;
 const brickOffsetTop = 30; // so the brick won't start right from the edge of the Canvas.
 const brickOffsetLeft = 30;
 
+// Set up the Game staus
+let score = 0;
+
 // Initialize the bricks with 0
 const bricks = [];
 for (let c = 0; c < brickColumnCount; c += 1) {
@@ -35,34 +40,23 @@ for (let c = 0; c < brickColumnCount; c += 1) {
   }
 }
 
-// Loop through the bricks 2d array and draw the bricks
-function drawBricks() {
-  for (let c = 0; c < brickColumnCount; c += 1) {
-    for (let r = 0; r < brickRowCount; r += 1) {
-      if (bricks[c][r].status === 1) {
-        const brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-        const brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
-        bricks[c][r].x = brickX;
-        bricks[c][r].y = brickY;
-        ctx.beginPath();
-        ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        ctx.fillStyle = '#0095DD';
-        ctx.fill();
-        ctx.closePath();
-      }
-    }
-  }
-}
-
 // Keep looping through the bricks array and check if any of the brick
 // collides with the ball
 function collisionDetection() {
   for (let c = 0; c < brickColumnCount; c += 1) {
     for (let r = 0; r < brickRowCount; r += 1) {
       const b = bricks[c][r];
-      if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
-        dy = -dy;
-        b.status = 0;
+      if (b.status === 1) {
+        if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+          dy = -dy;
+          b.status = 0;
+          score += 1;
+          if (score === brickRowCount * brickColumnCount) {
+            alert('YOU WIN, CONGRATS!');
+            document.location.reload();
+            clearInterval(interval); // Needed for Chrome to end game
+          }
+        }
       }
     }
   }
@@ -85,6 +79,25 @@ function keyUpHandler(e) {
   }
 }
 
+// Loop through the bricks 2d array and draw the bricks
+function drawBricks() {
+  for (let c = 0; c < brickColumnCount; c += 1) {
+    for (let r = 0; r < brickRowCount; r += 1) {
+      if (bricks[c][r].status === 1) {
+        const brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+        const brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+        bricks[c][r].x = brickX;
+        bricks[c][r].y = brickY;
+        ctx.beginPath();
+        ctx.rect(brickX, brickY, brickWidth, brickHeight);
+        ctx.fillStyle = '#0095DD';
+        ctx.fill();
+        ctx.closePath();
+      }
+    }
+  }
+}
+
 // Draw a ball shape
 function drawBall() {
   ctx.beginPath();
@@ -102,6 +115,13 @@ function drawPaddle() {
   ctx.closePath();
 }
 
+// A function that draws the score
+function drawScore() {
+  ctx.font = '16px Arial';
+  ctx.fillStyle = '#0095DD';
+  ctx.fillText(`Score: ${score}`, 8, 20);
+}
+
 function draw() {
 // Clear the rectangle from last frame
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -109,6 +129,7 @@ function draw() {
   drawBall();
   drawPaddle();
   drawBricks();
+  drawScore();
   collisionDetection();
 
   // Make sure the ball doesn't go out of the screen
@@ -118,9 +139,13 @@ function draw() {
   if (y + dy < ballRadius) {
     dy = -dy;
   } else if (y + dy > canvas.height - ballRadius) {
-    alert('GAME OVER');
-    document.location.reload();
-    clearInterval(interval); // Needed for Chrome to end game
+    if (x > paddleX && x < paddleX + paddleWidth) {
+      dy = -dy;
+    } else {
+      alert('GAME OVER');
+      document.location.reload();
+      clearInterval(interval); // Needed for Chrome to end game
+    }
   }
   // Move the paddle with keys
   if (rightPressed && paddleX < canvas.width - paddleWidth) {
