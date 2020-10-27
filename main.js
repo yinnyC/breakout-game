@@ -17,6 +17,41 @@ let paddleX = (canvas.width - paddleWidth) / 2;
 let rightPressed = false;
 let leftPressed = false;
 
+// Set up Brick's value
+const brickRowCount = 3;
+const brickColumnCount = 5;
+const brickWidth = 75;
+const brickHeight = 20;
+const brickPadding = 10;
+const brickOffsetTop = 30; // so the brick won't start right from the edge of the Canvas.
+const brickOffsetLeft = 30;
+
+// Initialize the bricks with 0
+const bricks = [];
+for (let c = 0; c < brickColumnCount; c += 1) {
+  bricks[c] = [];
+  for (let r = 0; r < brickRowCount; r += 1) {
+    bricks[c][r] = { x: 0, y: 0 };
+  }
+}
+
+// Loop through the bricks 2d array and draw the bricks
+function drawBricks() {
+  for (let c = 0; c < brickColumnCount; c += 1) {
+    for (let r = 0; r < brickRowCount; r += 1) {
+      const brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+      const brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+      bricks[c][r].x = brickX;
+      bricks[c][r].y = brickY;
+      ctx.beginPath();
+      ctx.rect(0, 0, brickWidth, brickHeight);
+      ctx.fillStyle = '#0095DD';
+      ctx.fill();
+      ctx.closePath();
+    }
+  }
+}
+
 // Handle the key status Whenever a key is pressed
 function keyDownHandler(e) {
   if (e.key === 'Right' || e.key === 'ArrowRight') {
@@ -57,6 +92,7 @@ function draw() {
   // Draw the objects
   drawBall();
   drawPaddle();
+  drawBricks();
 
   // Make sure the ball doesn't go out of the screen
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
