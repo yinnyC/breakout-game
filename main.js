@@ -30,6 +30,7 @@ const brickOffsetLeft = 30;
 
 // Set up the Game staus
 let score = 0;
+let lives = 3;
 
 // Initialize the bricks with 0
 const bricks = [];
@@ -54,7 +55,6 @@ function collisionDetection() {
           if (score === brickRowCount * brickColumnCount) {
             alert('YOU WIN, CONGRATS!');
             document.location.reload();
-            clearInterval(interval); // Needed for Chrome to end game
           }
         }
       }
@@ -130,6 +130,13 @@ function drawScore() {
   ctx.fillText(`Score: ${score}`, 8, 20);
 }
 
+// A function that draws the lives
+function drawLives() {
+  ctx.font = '16px Arial';
+  ctx.fillStyle = '#0095DD';
+  ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
+}
+
 function draw() {
 // Clear the rectangle from last frame
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -138,6 +145,7 @@ function draw() {
   drawPaddle();
   drawBricks();
   drawScore();
+  drawLives();
   collisionDetection();
 
   // Make sure the ball doesn't go out of the screen
@@ -150,9 +158,17 @@ function draw() {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
     } else {
-      alert('GAME OVER');
-      document.location.reload();
-      clearInterval(interval); // Needed for Chrome to end game
+      lives -= 1;
+      if (!lives) {
+        alert('GAME OVER');
+        document.location.reload();
+      } else {
+        x = canvas.width / 2;
+        y = canvas.height - 30;
+        dx = 2;
+        dy = -2;
+        paddleX = (canvas.width - paddleWidth) / 2;
+      }
     }
   }
   // Move the paddle with keys
@@ -164,10 +180,12 @@ function draw() {
   // Keeps moving the ball
   x += dx;
   y += dy;
+
+  requestAnimationFrame(draw);
 }
 // Listen to the behavior on keyboard and mouse
 document.addEventListener('keydown', keyDownHandler);
 document.addEventListener('keyup', keyUpHandler);
 document.addEventListener('mousemove', mouseMoveHandler);
-// Keep calling draw() every 10ms
-let interval = setInterval(draw, 10);
+
+draw();
