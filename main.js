@@ -79,6 +79,14 @@ function keyUpHandler(e) {
   }
 }
 
+// Handle the Mouse movement
+function mouseMoveHandler(e) {
+  const relativeX = e.clientX - canvas.offsetLeft;
+  if (relativeX > 0 && relativeX < canvas.width) {
+    paddleX = relativeX - paddleWidth / 2;
+  }
+}
+
 // Loop through the bricks 2d array and draw the bricks
 function drawBricks() {
   for (let c = 0; c < brickColumnCount; c += 1) {
@@ -157,8 +165,9 @@ function draw() {
   x += dx;
   y += dy;
 }
-// Listen to the behavior on keyboard
+// Listen to the behavior on keyboard and mouse
 document.addEventListener('keydown', keyDownHandler);
 document.addEventListener('keyup', keyUpHandler);
+document.addEventListener('mousemove', mouseMoveHandler);
 // Keep calling draw() every 10ms
 let interval = setInterval(draw, 10);
