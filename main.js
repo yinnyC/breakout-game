@@ -21,12 +21,13 @@ let leftPressed = false;
 
 // Set up Brick's value
 const brickRowCount = 3;
-const brickColumnCount = 5;
-const brickWidth = 75;
+const brickColumnCount = 10;
+const brickWidth = 35;
 const brickHeight = 20;
-const brickPadding = 10;
+const brickPadding = 7;
 const brickOffsetTop = 30; // so the brick won't start right from the edge of the Canvas.
 const brickOffsetLeft = 30;
+const palette = ['CORNFLOWERBLUE', 'ROYALBLUE', 'MEDIUMSLATEBLUE', 'MEDIUMPURPLE', 'PINK', 'HOTPINK', 'TOMATO', 'CORAL', 'DARKORANGE', 'GOLD'];
 
 // Set up the Game staus
 let score = 0;
@@ -52,7 +53,7 @@ function collisionDetection() {
           dy = -dy;
           b.status = 0;
           score += 1;
-          if (score === brickRowCount * brickColumnCount) {
+          if (score === (brickRowCount * brickColumnCount - 5)) {
             alert('YOU WIN, CONGRATS!');
             document.location.reload();
           }
@@ -86,26 +87,14 @@ function mouseMoveHandler(e) {
     paddleX = relativeX - paddleWidth / 2;
   }
 }
-
-// Loop through the bricks 2d array and draw the bricks
-function drawBricks() {
-  for (let c = 0; c < brickColumnCount; c += 1) {
-    for (let r = 0; r < brickRowCount; r += 1) {
-      if (bricks[c][r].status === 1) {
-        const brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-        const brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
-        bricks[c][r].x = brickX;
-        bricks[c][r].y = brickY;
-        ctx.beginPath();
-        ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        ctx.fillStyle = '#0095DD';
-        ctx.fill();
-        ctx.closePath();
-      }
-    }
-  }
+// Draw the background
+function drawBackground() {
+  ctx.beginPath();
+  ctx.rect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'pink';
+  ctx.fill();
+  ctx.closePath();
 }
-
 // Draw a ball shape
 function drawBall() {
   ctx.beginPath();
@@ -123,6 +112,33 @@ function drawPaddle() {
   ctx.closePath();
 }
 
+// Loop through the bricks 2d array and draw the bricks
+function drawBricks() {
+  for (let c = 0; c < brickColumnCount; c += 1) {
+    for (let r = 0; r < brickRowCount; r += 1) {
+      if (bricks[c][r].status === 1) {
+        let width = brickWidth;
+        let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+        const brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+        if ((r + 1) % 2 === 0) { // Extend the paddles for even num rows
+          if (c > 4) {
+            brickX = -1000; // Don't draw the rest of the bricks
+          } else {
+            brickX = (c * (brickWidth * 2 + brickPadding * 2)) + brickOffsetLeft - 10;
+            width = width * 2 + brickPadding;
+          }
+        }
+        bricks[c][r].x = brickX;
+        bricks[c][r].y = brickY;
+        ctx.beginPath();
+        ctx.rect(brickX, brickY, width, brickHeight);
+        ctx.fillStyle = palette[c];
+        ctx.fill();
+        ctx.closePath();
+      }
+    }
+  }
+}
 // A function that draws the score
 function drawScore() {
   ctx.font = '16px Arial';
@@ -140,6 +156,7 @@ function drawLives() {
 function draw() {
 // Clear the rectangle from last frame
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBackground();
   // Draw the objects
   drawBall();
   drawPaddle();
