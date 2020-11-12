@@ -1,0 +1,31 @@
+.msg-box {
+	visibility: hidden;
+	width: 50%;
+	height: 30%;
+	background-color: white;
+	border-radius: 0 0 10px 10px;
+	box-shadow: 5px 5px 10px grey;
+	position: absolute;
+	z-index: 10;
+	margin: auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+}
+.msg-box p {
+	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+		'Lucida Sans', Arial, sans-serif;
+	margin-top: 60px;
+	font-size: 30px;
+	color: darkgray;
+}
+.msg-box button {
+	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+		'Lucida Sans', Arial, sans-serif;
+	margin-top: 30px;
+	border: none;
+	font-size: 20px;
+	padding: 5px 20px 5px 20px;
+	border-radius: 10px;
+}
