@@ -3,6 +3,9 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Breakout Game</title>
+
+		<!-- CUSTOM STYLES -->
+		<link rel="stylesheet" href="./resources/css/style.css" />
 		<style>
 			* {
 				padding: 0;
@@ -17,14 +20,22 @@
 	</head>
 	<body>
 		<canvas id="myCanvas" width="480" height="320"></canvas>
-		<script src="Sprite.js"></script>
-		<script src="Ball.js"></script>
-		<script src="Brick.js"></script>
-		<script src="Bricks.js"></script>
-		<script src="Paddle.js"></script>
-		<script src="GameLabel.js"></script>
-		<script src="Game.js"></script>
+		<script src="./resources/js/Sprite.js"></script>
+		<script src="./resources/js/Ball.js"></script>
+		<script src="./resources/js/Brick.js"></script>
+		<script src="./resources/js/Bricks.js"></script>
+		<script src="./resources/js/Paddle.js"></script>
+		<script src="./resources/js/GameLabel.js"></script>
+		<script src="./resources/js/Game.js"></script>
+		<div class="msg-box" id="gameover">
+			<p>Game Over</p>
+			<button>Ok</button>
+		</div>
+		<div class="msg-box" id="won">
+			<p>YOU WIN, CONGRATS!!!</p>
+			<button>Ok</button>
+		</div>
 
-		<script src="main.js"></script>
+		<script src="./resources/js/main.js"></script>
 	</body>
 </html>
