@@ -1,11 +1,10 @@
-// Paddle class
-class Paddle {
+// -------------------------
+// Paddle
+// -------------------------
+
+class Paddle extends Sprite {
   constructor(x, y, width, height, color = 'red') {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.color = color;
+    super(x, y, width, height, color);
   }
 
   moveTo(x, y) {
@@ -16,14 +15,5 @@ class Paddle {
   moveBy(dx, dy) {
     this.x += dx;
     this.y += dy;
-  }
-
-  render(ctx) {
-    // Draw a paddle shape
-    ctx.beginPath();
-    ctx.rect(this.x, this.y, this.width, this.height);
-    ctx.fillStyle = this.color;
-    ctx.fill();
-    ctx.closePath();
   }
 }

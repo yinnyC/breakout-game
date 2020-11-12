@@ -34,8 +34,8 @@ class Game {
       offsetLeft: this.brickOffsetLeft,
       color: this.objectColor,
     });
-    this.scoreLabel = new GameLabel('Score', 8, 20);
-    this.livesLabel = new GameLabel('Lives', this.canvas.width - 65, 20);
+    this.scoreLabel = new GameLabel('Score', 8, 20, this.objectColor);
+    this.livesLabel = new GameLabel('Lives', this.canvas.width - 65, 20, this.objectColor);
     this.rightPressed = false;
     this.leftPressed = false;
 
@@ -106,6 +106,7 @@ class Game {
         if (this.livesLabel.value < 1) {
           alert('GAME OVER');
           document.location.reload();
+          this.restBallAndPaddle();
         } else {
           this.restBallAndPaddle();
         }

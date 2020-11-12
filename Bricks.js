@@ -1,3 +1,7 @@
+// -------------------------
+// Bricks
+// -------------------------
+
 class Bricks {
   constructor({ cols, rows, width, height, padding, offsetTop, offsetLeft, color }) {
     this.cols = cols;
